@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BT2</title>
+  </head>
+  <script>
+    window.onload = function () {
+      fetch("bt2.php?action=loadKH")
+        .then((response) => response.json())
+        .then((data) => {
+          let select = document.getElementById("TENKH");
+          data.forEach((item) => {
+            let option = document.createElement("option");
+            option.value = item.MAKH;
+            option.innerHTML = item.TENKH;
+            select.appendChild(option);
+          });
+        });
+      
+      document.getElementById("btn_tra_xe").addEventListener("click", function (e) {
+        e.preventDefault();
+        let MAKH = document.getElementById("TENKH").value;
+        let SOXE = document.getElementById("SOXE").value;
+        let NGAYTHUE = document.getElementById("NGAYTHUE").value;
+        let NGAYTRA = document.getElementById("NGAYTRA").value;
+
+        let data = {
+          MAKH: MAKH,
+          SOXE: SOXE,
+          NGAYTHUE: NGAYTHUE,
+          NGAYTRA: NGAYTRA,
+        };
+        fetch("bt2.php?action=TRAXE", {
+          method: "POST",
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            if (data.status == 200) {
+              alert("Trả xe thành công");
+            } else {
+              alert("Trả xe thất bại");
+            }
+          });
+      });
+    };
+
+  </script>
+  <body>
+    <h2>Thông tin trả xe</h2>
+    <form>
+      <div>
+        <label for="TENKH">Tên khách hàng</label>
+        <select name="TENKH" id="TENKH">
+          
+        </select>
+      </div>
+      <div>
+        <label for="SOXE">Số xe</label>
+        <input type="text" placeholder="Số xe" id="SOXE" name="SOXE" />
+      </div>
+      <div>
+        <label for="NGAYTHUE">Ngày thuê</label>
+        <input type="date" placeholder="Ngày thuê" id="NGAYTHUE" name="NGAYTHUE" />
+
+      </div>
+      <div>
+        <label for="NGAYTRA">Ngày Trả</label>
+        <input type="date" placeholder="Ngày trả" id="NGAYTRA" name="NGAYTRA" />
+      </div>
+      <input type="submit" value="Trả xe" id="btn_tra_xe"></button>
+    </form>
+  </body>
+</html>
